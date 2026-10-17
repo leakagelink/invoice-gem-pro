@@ -42,7 +42,7 @@ function Splash() {
   );
 }
 
-const inp = "w-full rounded-xl border border-border bg-card px-3 py-2.5 outline-none focus:ring-2 focus:ring-ring";
+const inp = "h-11 w-full rounded-xl border border-border bg-card px-3 text-base outline-none focus:ring-2 focus:ring-ring";
 
 function App() {
   const [splash, setSplash] = useState(true);
@@ -110,10 +110,10 @@ function App() {
       <main className="mx-auto max-w-2xl px-3 py-3 sm:p-4">
         <div className="print-area rounded-3xl border border-border bg-card p-4 shadow-sm sm:p-5">
           <input value={bill.shopName} onChange={(e) => set("shopName", e.target.value)} placeholder="Yahan Dukaan Ka Naam Likho"
-            className="w-full bg-transparent text-center text-2xl font-bold text-primary outline-none placeholder:text-primary/40" />
+            className="w-full bg-transparent text-center text-xl font-bold sm:text-2xl text-primary outline-none placeholder:text-primary/40" />
           <div className="mt-3 flex items-center gap-2 rounded-full border border-border bg-accent px-4 py-2.5">
             <MapPin className="h-4 w-4 text-primary" />
-            <input value={bill.location} onChange={(e) => set("location", e.target.value)} placeholder="Shop location" className="flex-1 bg-transparent outline-none" />
+            <input value={bill.location} onChange={(e) => set("location", e.target.value)} placeholder="Shop location" className="min-w-0 flex-1 bg-transparent text-base outline-none" />
           </div>
           <div className="mt-3 grid grid-cols-1 min-[400px]:grid-cols-2 gap-3">
             <input value={bill.phone} onChange={(e) => set("phone", e.target.value)} placeholder="Shop mobile" className={inp} />
@@ -178,23 +178,23 @@ function App() {
               <select value={bill.paymentMode} onChange={(e) => set("paymentMode", e.target.value)} className={inp + " mt-1 font-normal text-foreground"}>
                 <option>Cash</option><option>UPI</option><option>Card</option><option>Udhaar</option></select></label>
           </div>
-          <textarea value={bill.notes} onChange={(e) => set("notes", e.target.value)} placeholder="Note (optional)" rows={2} className={inp + " mt-3"} />
+          <textarea value={bill.notes} onChange={(e) => set("notes", e.target.value)} placeholder="Note (optional)" rows={2} className={inp + " mt-3 h-auto py-2.5"} />
 
           <div className="mt-4 space-y-1 px-1 text-sm text-muted-foreground">
             <div className="flex justify-between"><span>Subtotal</span><span>{money(totals.subtotal)}</span></div>
             {!!bill.discount && <div className="flex justify-between"><span>Discount</span><span>- {money(bill.discount)}</span></div>}
             {!!bill.taxPercent && <div className="flex justify-between"><span>Tax ({bill.taxPercent}%)</span><span>{money(totals.tax)}</span></div>}
           </div>
-          <div className="mt-3 flex items-center justify-between rounded-2xl bg-primary px-6 py-5 text-primary-foreground shadow-lg shadow-primary/30">
+          <div className="mt-3 flex items-center justify-between gap-3 rounded-2xl bg-primary px-5 py-4 text-primary-foreground shadow-lg shadow-primary/30">
             <span className="font-semibold tracking-wide">TOTAL AMOUNT</span>
-            <span className="text-3xl font-bold">{money(totals.total)}</span>
+            <span className="truncate text-2xl font-bold sm:text-3xl">{money(totals.total)}</span>
           </div>
         </div>
         <p className="no-print mt-4 text-center text-sm text-muted-foreground">Works fully offline · Data stays on this device</p>
         <p className="no-print mt-1 text-center text-xs text-muted-foreground">Powered By:- Anurag Tecnology</p>
       </main>
 
-      <nav className="no-print fixed inset-x-0 bottom-0 z-30 border-t border-border bg-card px-2 py-2">
+      <nav className="no-print fixed inset-x-0 bottom-0 z-30 border-t border-border bg-card px-2 pt-2 pb-[calc(0.5rem+env(safe-area-inset-bottom))] shadow-lg">
         <div className="mx-auto grid max-w-2xl grid-cols-5 gap-1 text-xs font-medium">
           {[
             { l: "New", i: FilePlus2, f: doNew },
@@ -203,7 +203,7 @@ function App() {
             { l: "Print", i: Printer, f: () => window.print() },
             { l: "Share", i: Share2, f: doShare },
           ].map(({ l, i: I, f }) => (
-            <button key={l} onClick={f} className={`flex flex-col items-center gap-1 rounded-xl py-2 ${l === "Save" ? "bg-primary text-primary-foreground" : "text-primary"}`}>
+            <button key={l} onClick={f} className={`flex min-h-14 flex-col items-center justify-center gap-1 rounded-xl py-2 transition active:scale-95 ${l === "Save" ? "bg-primary text-primary-foreground" : "text-primary"}`}>
               <I className="h-5 w-5" />{l}
             </button>
           ))}
