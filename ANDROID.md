@@ -1,22 +1,33 @@
 # Update the Android app (PowerShell)
 
-Commit/sync the latest Lovable changes to GitHub first, then run on your PC:
+Sync the latest Lovable changes to GitHub first, then run on your PC.
+
+If `git pull` previously failed with "local changes would be overwritten", back up and remove the old hand-made files first:
 
 ```powershell
 Set-Location C:\Users\ASUS\invoice-gem-pro
+New-Item -ItemType Directory -Path ..\abm-backup -Force | Out-Null
+Copy-Item android-web, capacitor.config.ts, vite.android.config.ts, package.json ..\abm-backup -Recurse -Force
+Remove-Item -Recurse -Force android-web
+Remove-Item -Force capacitor.config.ts, vite.android.config.ts
+git checkout -- package.json
+```
+
+Then update and build:
+
+```powershell
 git pull
 npm install
+Remove-Item -Recurse -Force dist-android -ErrorAction SilentlyContinue
 npx vite build --config vite.android.config.ts
 npx cap sync android
 npx cap open android
 ```
 
-If Git reports conflicts with your earlier locally created android-web files, back up those files before accepting the updated versions from this project. Do not overwrite local work without a backup.
+`git pull` must end without "error" / "Aborting", otherwise the APK still contains the old build. Do NOT run `npm run build` for Android — that builds the website only.
 
 In Android Studio choose Build > Build APK(s), then install the new APK as an update with the same signing key. Do not uninstall or clear storage unless you are willing to lose locally saved bills. If the android folder does not exist yet, run `npx cap add android` before sync.
 
-The updated Android entry does not import the website's SSR document shell, generated route tree, or server code. Every current screen (new bill, saved bills, ads) and the PDF libraries are bundled into the APK, so screen loading does not require internet. Location lookup and real ads still need internet; browser PDF/print behavior in a native WebView requires separate native integration.
+The Android entry renders the bill screen directly (no router, no SSR document shell, no server code), so it starts on any WebView path. The native splash is hidden as soon as the app mounts, with a 1.5s safety fallback. Location lookup and real ads still need internet.
 
-The native splash auto-hides after 500ms; the branded app splash lasts 450ms after the bill UI mounts. Invalid saved collections cannot block initialization. On the website, screen caching starts only after opening the published version online; the editor preview deliberately has no offline worker.
-
-If this APK still stalls, open chrome://inspect/#devices on your computer with USB debugging enabled and share the WebView console error. Native installation and Gradle compilation cannot be checked in the Lovable preview.
+If this APK still stalls, open chrome://inspect/#devices on your computer with USB debugging enabled and share the WebView console error.
