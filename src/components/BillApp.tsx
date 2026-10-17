@@ -18,25 +18,13 @@ function Splash() {
       </div>
       <h1 className="mt-8 text-3xl font-bold tracking-wide">ANURAG BILL MAKING</h1>
       <p className="mt-2 text-xs tracking-[0.4em] opacity-70">HAR DUKAAN KA BILL</p>
+      <p className="mt-3 text-[10px] font-semibold opacity-80">DEMO APP</p>
       <div className="mt-8 h-1.5 w-64 overflow-hidden rounded-full bg-primary-foreground/20">
         <div className="animate-loadbar h-full rounded-full bg-primary-foreground" />
       </div>
       <p className="absolute bottom-10 text-sm opacity-80">
         Powered By:- <span className="font-semibold">Anurag Tecnology</span>
       </p>
-    </div>
-  );
-}
-
-function DemoWatermark() {
-  const band = Array.from({ length: 10 }, () => "DEMO APP").join("   ·   ");
-  return (
-    <div aria-hidden="true" className="no-print pointer-events-none fixed inset-0 z-[60] overflow-hidden">
-      <div className="absolute left-1/2 top-1/2 flex w-[220%] -translate-x-1/2 -translate-y-1/2 -rotate-[24deg] flex-col gap-14 text-destructive/15">
-        {[0, 1, 2, 3, 4].map((i) => (
-          <div key={i} className={`demo-watermark-band text-center ${i % 2 ? "opacity-60" : ""}`}>{band}</div>
-        ))}
-      </div>
     </div>
   );
 }
@@ -112,7 +100,10 @@ export function BillApp() {
       <header className="no-print sticky top-0 z-30 grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3 bg-primary px-3 pb-3 pt-[calc(0.75rem+env(safe-area-inset-top))] text-primary-foreground shadow-md sm:px-4">
         <div className="flex min-w-0 items-center gap-2.5">
           <img src={logo} alt="" width={40} height={40} className="h-9 w-9 shrink-0 rounded-xl sm:h-10 sm:w-10" />
-          <h1 className="truncate text-base font-bold tracking-wide sm:text-lg">ANURAG BILL MAKING</h1>
+          <div className="min-w-0">
+            <h1 className="truncate text-base font-bold tracking-wide sm:text-lg">ANURAG BILL MAKING</h1>
+            <p className="mt-0.5 text-[10px] font-semibold text-primary-foreground/80">DEMO APP</p>
+          </div>
         </div>
         <button onClick={() => setShowSaved(true)} className="flex h-10 shrink-0 items-center gap-1.5 rounded-full bg-primary-foreground/15 px-3 text-sm active:bg-primary-foreground/25">
           <History className="h-4 w-4" /> <span className="hidden min-[380px]:inline">Saved</span> ({saved.length})
@@ -229,12 +220,16 @@ export function BillApp() {
             </button>
           ))}
         </div>
+        <p className="pt-1 text-center text-[10px] font-semibold leading-3 text-muted-foreground">DEMO APP</p>
       </nav>
 
       {showSaved && (
         <div className="no-print fixed inset-0 z-40 flex flex-col bg-background">
           <div className="flex items-center gap-3 bg-primary px-4 py-4 text-primary-foreground">
-            <h2 className="flex-1 text-lg font-bold">Saved Bills ({saved.length})</h2>
+            <div className="flex-1">
+              <h2 className="text-lg font-bold">Saved Bills ({saved.length})</h2>
+              <p className="mt-0.5 text-[10px] font-semibold text-primary-foreground/80">DEMO APP</p>
+            </div>
             <button onClick={() => setShowSaved(false)} aria-label="Close"><X /></button>
           </div>
           <div className="p-4">
@@ -258,12 +253,12 @@ export function BillApp() {
             ))}
           </div>
           <div className="p-3"><AdBanner /></div>
+          <p className="pb-[calc(0.5rem+env(safe-area-inset-bottom))] text-center text-[10px] font-semibold text-muted-foreground">DEMO APP</p>
         </div>
       )}
 
       {ad && <InterstitialAd onClose={() => setAd(false)} />}
       {toast && <div className="no-print fixed bottom-24 left-1/2 z-50 -translate-x-1/2 rounded-full bg-foreground px-5 py-2 text-sm text-background">{toast}</div>}
-      <DemoWatermark />
     </div>
   );
 }
