@@ -6,7 +6,7 @@ import {
 import logo from "@/assets/logo-icon.jpg";
 import { AdBanner, InterstitialAd } from "@/components/AdBanner";
 import { blankBill, calc, deleteBill, loadBills, money, newItem, saveBill, uid, type Bill } from "@/lib/bills";
-import { billPdf } from "@/lib/pdf";
+import { billPdf, downloadPdf } from "@/lib/pdf";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -75,7 +75,7 @@ function App() {
   const doSave = () => {
     saveBill(bill); setSaved(loadBills()); setToast("Bill save ho gaya ✓"); setAd(true);
   };
-  const doDownload = async () => { (await billPdf(bill)).save(`Bill-${bill.billNo}.pdf`); setToast("PDF download ho gaya"); };
+  const doDownload = () => downloadPdf(bill).then(() => setToast("PDF download ho gaya ✓"));
   const doShare = async () => {
     const doc = await billPdf(bill);
     const file = new File([doc.output("blob")], `Bill-${bill.billNo}.pdf`, { type: "application/pdf" });
@@ -189,6 +189,11 @@ function App() {
             <span className="font-semibold tracking-wide">TOTAL AMOUNT</span>
             <span className="truncate text-2xl font-bold sm:text-3xl">{money(totals.total)}</span>
           </div>
+          <div className="no-print mt-3 grid grid-cols-3 gap-2">
+            <button onClick={doSave} className="flex h-12 items-center justify-center gap-1.5 rounded-xl bg-primary font-semibold text-primary-foreground active:scale-95"><Save className="h-5 w-5" />Save</button>
+            <button onClick={doDownload} className="flex h-12 items-center justify-center gap-1.5 rounded-xl border border-primary/30 bg-accent font-semibold text-primary active:scale-95"><Download className="h-5 w-5" />PDF</button>
+            <button onClick={() => window.print()} className="flex h-12 items-center justify-center gap-1.5 rounded-xl border border-primary/30 bg-accent font-semibold text-primary active:scale-95"><Printer className="h-5 w-5" />Print</button>
+          </div>
         </div>
         <p className="no-print mt-4 text-center text-sm text-muted-foreground">Works fully offline · Data stays on this device</p>
         <p className="no-print mt-1 text-center text-xs text-muted-foreground">Powered By:- Anurag Tecnology</p>
@@ -229,7 +234,7 @@ function App() {
                   <div className="text-sm text-muted-foreground">{b.shopName} · {b.date}</div>
                 </button>
                 <div className="mt-3 flex gap-4 text-sm">
-                  <button className="flex items-center gap-1 text-primary" onClick={async () => (await billPdf(b)).save(`Bill-${b.billNo}.pdf`)}><Download className="h-4 w-4" />PDF</button>
+                  <button className="flex items-center gap-1 text-primary" onClick={() => downloadPdf(b)}><Download className="h-4 w-4" />PDF</button>
                   <button className="flex items-center gap-1 text-primary" onClick={() => { setBill({ ...b, id: uid(), billNo: blankBill().billNo }); setShowSaved(false); }}><Copy className="h-4 w-4" />Copy</button>
                   <button className="flex items-center gap-1 text-destructive" onClick={() => { if (confirm("Delete this bill?")) { deleteBill(b.id); setSaved(loadBills()); } }}><Trash2 className="h-4 w-4" />Delete</button>
                 </div>
