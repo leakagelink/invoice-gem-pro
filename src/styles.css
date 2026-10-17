@@ -161,7 +161,7 @@
     linear-gradient(160deg, var(--primary), var(--brand-deep));
 }
 @keyframes loadbar { from { width: 2% } to { width: 100% } }
-@utility animate-loadbar { animation: loadbar 2.2s ease-out forwards; }
+@utility animate-loadbar { animation: loadbar 0.45s ease-out forwards; }
 .demo-watermark-band {
   white-space: nowrap;
   font-weight: 800;

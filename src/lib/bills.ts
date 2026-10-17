@@ -33,7 +33,13 @@ export function calc(b: Pick<Bill, "items" | "discount" | "taxPercent">) {
 export const money = (n: number) => "Rs " + n.toFixed(2);
 
 export function loadBills(): Bill[] {
-  try { return JSON.parse(localStorage.getItem(KEY) || "[]"); } catch { return []; }
+  try {
+    const data: unknown = JSON.parse(localStorage.getItem(KEY) || "[]");
+    if (!Array.isArray(data)) return [];
+    return data.filter((entry): entry is Bill => entry !== null && typeof entry === "object" &&
+      typeof entry.id === "string" && typeof entry.billNo === "string" && Array.isArray(entry.items) &&
+      entry.items.every((item: unknown) => item !== null && typeof item === "object" && "id" in item && "qty" in item && "rate" in item));
+  } catch { return []; }
 }
 export function saveBill(b: Bill) {
   const all = loadBills().filter((x) => x.id !== b.id);
@@ -51,7 +57,12 @@ export function nextBillNo() {
 }
 export function blankBill(): Bill {
   let shop = { shopName: "", location: "", phone: "", gstin: "" };
-  try { shop = { ...shop, ...JSON.parse(localStorage.getItem(SHOP) || "{}") }; } catch { /* empty */ }
+  try {
+    const stored = JSON.parse(localStorage.getItem(SHOP) || "{}");
+    for (const key of ["shopName", "location", "phone", "gstin"] as const) {
+      if (typeof stored?.[key] === "string") shop[key] = stored[key];
+    }
+  } catch { /* empty */ }
   return {
     id: uid(), ...shop, customerName: "", customerPhone: "", billNo: nextBillNo(),
     date: new Date().toISOString().slice(0, 10), items: [newItem()], discount: 0, taxPercent: 0,
