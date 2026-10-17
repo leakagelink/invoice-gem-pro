@@ -94,19 +94,21 @@ function App() {
     [b.billNo, b.customerName, b.shopName].join(" ").toLowerCase().includes(q.toLowerCase()));
 
   return (
-    <div className="min-h-screen pb-28">
-      <header className="no-print sticky top-0 z-30 flex items-center gap-3 bg-primary px-4 py-3 text-primary-foreground shadow-md">
-        <img src={logo} alt="" width={40} height={40} className="h-10 w-10 rounded-xl" />
-        <h1 className="flex-1 text-lg font-bold tracking-wide">ANURAG BILL MAKING</h1>
-        <button onClick={() => setShowSaved(true)} className="flex items-center gap-1.5 rounded-full bg-primary-foreground/15 px-4 py-2 text-sm">
-          <History className="h-4 w-4" /> Saved ({saved.length})
+    <div className="min-h-screen pb-[calc(6rem+env(safe-area-inset-bottom))]">
+      <header className="no-print sticky top-0 z-30 grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3 bg-primary px-3 pb-3 pt-[calc(0.75rem+env(safe-area-inset-top))] text-primary-foreground shadow-md sm:px-4">
+        <div className="flex min-w-0 items-center gap-2.5">
+          <img src={logo} alt="" width={40} height={40} className="h-9 w-9 shrink-0 rounded-xl sm:h-10 sm:w-10" />
+          <h1 className="truncate text-base font-bold tracking-wide sm:text-lg">ANURAG BILL MAKING</h1>
+        </div>
+        <button onClick={() => setShowSaved(true)} className="flex h-10 shrink-0 items-center gap-1.5 rounded-full bg-primary-foreground/15 px-3 text-sm active:bg-primary-foreground/25">
+          <History className="h-4 w-4" /> <span className="hidden min-[380px]:inline">Saved</span> ({saved.length})
         </button>
       </header>
 
-      <div className="no-print mt-3 px-4"><AdBanner /></div>
+      <div className="no-print mt-3 px-3"><AdBanner /></div>
 
-      <main className="mx-auto max-w-2xl p-4">
-        <div className="print-area rounded-3xl border border-border bg-card p-5 shadow-sm">
+      <main className="mx-auto max-w-2xl px-3 py-3 sm:p-4">
+        <div className="print-area rounded-3xl border border-border bg-card p-4 shadow-sm sm:p-5">
           <input value={bill.shopName} onChange={(e) => set("shopName", e.target.value)} placeholder="Yahan Dukaan Ka Naam Likho"
             className="w-full bg-transparent text-center text-2xl font-bold text-primary outline-none placeholder:text-primary/40" />
           <div className="mt-3 flex items-center gap-2 rounded-full border border-border bg-accent px-4 py-2.5">
@@ -131,29 +133,43 @@ function App() {
               <input value={bill.customerPhone} onChange={(e) => set("customerPhone", e.target.value)} placeholder="Customer mobile" className={inp + " pl-9"} /></div>
           </div>
 
-          <div className="mt-5 overflow-hidden rounded-2xl border border-border">
-            <div className="grid grid-cols-[28px_1fr_48px_70px_72px_24px] gap-1 bg-accent px-3 py-3 text-xs font-semibold text-accent-foreground">
-              <span>NO.</span><span>PRODUCT</span><span>QTY</span><span>RATE</span><span className="text-right">TOTAL</span><span />
-            </div>
+          <div className="mt-5 flex items-center justify-between">
+            <h3 className="text-sm font-semibold text-accent-foreground">PRODUCTS ({bill.items.length})</h3>
+          </div>
+          <div className="mt-2 space-y-2.5">
             {bill.items.map((it, k) => (
-              <div key={it.id} className="grid grid-cols-[28px_1fr_48px_70px_72px_24px] items-center gap-1 border-t border-border px-3 py-2 text-sm">
-                <span className="text-muted-foreground">{k + 1}</span>
-                <input value={it.name} onChange={(e) => setItem(it.id, "name", e.target.value)} placeholder="Product name" className="min-w-0 bg-transparent outline-none" />
-                <input type="number" inputMode="decimal" value={it.qty || ""} onChange={(e) => setItem(it.id, "qty", e.target.value)} placeholder="1" className="min-w-0 bg-transparent outline-none" />
-                <input type="number" inputMode="decimal" value={it.rate || ""} onChange={(e) => setItem(it.id, "rate", e.target.value)} placeholder="0.00" className="min-w-0 bg-transparent outline-none" />
-                <span className="text-right font-medium text-primary">{it.qty * it.rate ? (it.qty * it.rate).toFixed(2) : "—"}</span>
-                <button className="no-print" aria-label="Remove item" onClick={() => set("items", bill.items.length > 1 ? bill.items.filter((x) => x.id !== it.id) : [newItem()])}>
-                  <Trash2 className="h-4 w-4 text-destructive" />
-                </button>
+              <div key={it.id} className="rounded-2xl border border-border bg-accent/40 p-3">
+                <div className="flex items-center gap-2">
+                  <span className="grid h-7 w-7 shrink-0 place-items-center rounded-full bg-primary text-xs font-bold text-primary-foreground">{k + 1}</span>
+                  <input value={it.name} onChange={(e) => setItem(it.id, "name", e.target.value)} placeholder="Product name"
+                    className="h-11 min-w-0 flex-1 rounded-xl border border-border bg-card px-3 text-base outline-none focus:ring-2 focus:ring-ring" />
+                  <button className="no-print grid h-11 w-11 shrink-0 place-items-center rounded-xl text-destructive active:bg-destructive/10" aria-label="Remove item"
+                    onClick={() => set("items", bill.items.length > 1 ? bill.items.filter((x) => x.id !== it.id) : [newItem()])}>
+                    <Trash2 className="h-5 w-5" />
+                  </button>
+                </div>
+                <div className="mt-2 grid grid-cols-[minmax(0,1fr)_minmax(0,1fr)_minmax(0,1.2fr)] gap-2 pl-9">
+                  <label className="text-[11px] font-semibold text-muted-foreground">QTY
+                    <input type="number" inputMode="decimal" value={it.qty || ""} onChange={(e) => setItem(it.id, "qty", e.target.value)} placeholder="1"
+                      className="mt-0.5 h-11 w-full rounded-xl border border-border bg-card px-3 text-base font-normal text-foreground outline-none focus:ring-2 focus:ring-ring" /></label>
+                  <label className="text-[11px] font-semibold text-muted-foreground">RATE / MRP
+                    <input type="number" inputMode="decimal" value={it.rate || ""} onChange={(e) => setItem(it.id, "rate", e.target.value)} placeholder="0.00"
+                      className="mt-0.5 h-11 w-full rounded-xl border border-border bg-card px-3 text-base font-normal text-foreground outline-none focus:ring-2 focus:ring-ring" /></label>
+                  <div className="text-[11px] font-semibold text-muted-foreground">TOTAL
+                    <div className="mt-0.5 flex h-11 items-center justify-end truncate rounded-xl bg-card px-3 text-base font-bold text-primary">
+                      {it.qty * it.rate ? (it.qty * it.rate).toFixed(2) : "—"}
+                    </div>
+                  </div>
+                </div>
               </div>
             ))}
           </div>
           <button onClick={() => set("items", [...bill.items, newItem()])}
-            className="no-print mt-3 flex w-full items-center justify-center gap-2 rounded-2xl border-2 border-dashed border-primary/30 py-4 font-medium text-primary">
+            className="no-print mt-3 flex w-full items-center justify-center gap-2 rounded-2xl border-2 border-dashed border-primary/30 py-4 font-medium text-primary active:bg-accent">
             <Plus className="h-5 w-5" /> Add Product
           </button>
 
-          <div className="mt-4 grid grid-cols-3 gap-3">
+          <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-3">
             <label className="text-xs font-semibold text-muted-foreground">DISCOUNT (Rs)
               <input type="number" value={bill.discount || ""} onChange={(e) => set("discount", Number(e.target.value))} placeholder="0" className={inp + " mt-1 font-normal text-foreground"} /></label>
             <label className="text-xs font-semibold text-muted-foreground">GST / TAX %
