@@ -162,6 +162,14 @@
 }
 @keyframes loadbar { from { width: 2% } to { width: 100% } }
 @utility animate-loadbar { animation: loadbar 2.2s ease-out forwards; }
+.demo-watermark-band {
+  white-space: nowrap;
+  font-weight: 800;
+  font-size: 2.25rem;
+  letter-spacing: 0.35em;
+  line-height: 1;
+  user-select: none;
+}
 @media print {
   .no-print { display: none !important; }
   body { background: white; }

@@ -42,6 +42,19 @@ function Splash() {
   );
 }
 
+function DemoWatermark() {
+  const band = Array.from({ length: 10 }, () => "DEMO APP").join("   ·   ");
+  return (
+    <div aria-hidden="true" className="no-print pointer-events-none fixed inset-0 z-[60] overflow-hidden">
+      <div className="absolute left-1/2 top-1/2 flex w-[220%] -translate-x-1/2 -translate-y-1/2 -rotate-[24deg] flex-col gap-14 text-destructive/15">
+        {[0, 1, 2, 3, 4].map((i) => (
+          <div key={i} className={`demo-watermark-band text-center ${i % 2 ? "opacity-60" : ""}`}>{band}</div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 const inp = "h-11 w-full rounded-xl border border-border bg-card px-3 text-base outline-none focus:ring-2 focus:ring-ring";
 
 function App() {
@@ -261,6 +274,7 @@ function App() {
 
       {ad && <InterstitialAd onClose={() => setAd(false)} />}
       {toast && <div className="no-print fixed bottom-24 left-1/2 z-50 -translate-x-1/2 rounded-full bg-foreground px-5 py-2 text-sm text-background">{toast}</div>}
+      <DemoWatermark />
     </div>
   );
 }
