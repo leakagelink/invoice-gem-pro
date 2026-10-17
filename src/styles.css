@@ -142,3 +142,28 @@
     color: var(--color-foreground);
   }
 }
+
+:root {
+  --primary: oklch(0.5 0.27 264);
+  --primary-foreground: oklch(0.99 0 0);
+  --background: oklch(0.97 0.015 255);
+  --ring: oklch(0.5 0.27 264);
+  --accent: oklch(0.94 0.03 260);
+  --accent-foreground: oklch(0.45 0.25 264);
+  --brand-deep: oklch(0.38 0.22 266);
+}
+@theme inline {
+  --color-brand-deep: var(--brand-deep);
+  --font-sans: "Outfit", system-ui, sans-serif;
+}
+@utility splash-bg {
+  background: repeating-linear-gradient(135deg, oklch(1 0 0 / 5%) 0 1px, transparent 1px 14px),
+    linear-gradient(160deg, var(--primary), var(--brand-deep));
+}
+@keyframes loadbar { from { width: 2% } to { width: 100% } }
+@utility animate-loadbar { animation: loadbar 2.2s ease-out forwards; }
+@media print {
+  .no-print { display: none !important; }
+  body { background: white; }
+  .print-area { box-shadow: none !important; border: none !important; }
+}
