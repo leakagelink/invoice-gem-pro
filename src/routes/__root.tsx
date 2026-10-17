@@ -77,7 +77,8 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
   head: () => ({
     meta: [
       { charSet: "utf-8" },
-      { name: "viewport", content: "width=device-width, initial-scale=1" },
+      { name: "viewport", content: "width=device-width, initial-scale=1, viewport-fit=cover" },
+      { name: "theme-color", content: "#0B3BFF" },
       { title: "Anurag Bill Making" },
       { name: "description", content: "Har dukaan ka bill — bill banao, save, download aur print karo." },
       { name: "author", content: "Anurag Tecnology" },
