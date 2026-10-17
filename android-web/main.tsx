@@ -1,15 +1,25 @@
-import React from "react";
 import { createRoot } from "react-dom/client";
-import { createRootRoute, createRoute, createRouter, Outlet, RouterProvider } from "@tanstack/react-router";
 import { SplashScreen } from "@capacitor/splash-screen";
 import { BillApp } from "../src/components/BillApp";
 import "../src/styles.css";
 
-// Capacitor already ships all screens locally. No SSR document shell or service worker.
-const rootRoute = createRootRoute({ component: Outlet });
-const indexRoute = createRoute({ getParentRoute: () => rootRoute, path: "/", component: BillApp });
-const router = createRouter({ routeTree: rootRoute.addChildren([indexRoute]) });
+// Capacitor ships every screen locally. The bill UI is a single screen, so it renders
+// directly without a router: no SSR shell, no route matching, no service worker.
+// Whatever path the WebView opens (/, /index.html, ...) the app always starts.
+
+function hideNativeSplash() {
+  void SplashScreen.hide().catch(() => { /* Browser-only checks have no native splash. */ });
+}
+
 const container = document.getElementById("root");
-if (!container) throw new Error("App root missing");
-createRoot(container).render(<RouterProvider router={router} />);
-void SplashScreen.hide().catch(() => { /* Browser-only checks have no native splash. */ });
+try {
+  if (!container) throw new Error("App root missing");
+  createRoot(container).render(<BillApp />);
+} catch (error) {
+  if (container) container.textContent = "App start nahi ho payi. App band karke dobara kholo.";
+  console.error(error);
+} finally {
+  hideNativeSplash();
+  // Safety net: never leave the native splash on screen.
+  setTimeout(hideNativeSplash, 1500);
+}
