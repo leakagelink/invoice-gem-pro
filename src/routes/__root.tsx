@@ -12,6 +12,7 @@ import { useEffect, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
+import { registerAppWorker } from "../lib/register-app-worker";
 
 function NotFoundComponent() {
   return (
@@ -119,6 +120,9 @@ function RootShell({ children }: { children: ReactNode }) {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+  useEffect(() => {
+    void registerAppWorker().catch((error: unknown) => console.warn("Offline cache unavailable", error));
+  }, []);
 
   return (
     <QueryClientProvider client={queryClient}>
