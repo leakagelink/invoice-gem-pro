@@ -274,6 +274,7 @@ function App() {
 
       {ad && <InterstitialAd onClose={() => setAd(false)} />}
       {toast && <div className="no-print fixed bottom-24 left-1/2 z-50 -translate-x-1/2 rounded-full bg-foreground px-5 py-2 text-sm text-background">{toast}</div>}
+      <DemoWatermark />
     </div>
   );
 }
