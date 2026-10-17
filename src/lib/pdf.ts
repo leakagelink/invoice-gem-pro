@@ -39,7 +39,7 @@ export async function billPdf(b: Bill) {
   doc.text(`Payment: ${b.paymentMode}`, 14, y);
   if (b.notes) doc.text(doc.splitTextToSize("Note: " + b.notes, 180), 14, y + 7);
   doc.setTextColor(120);
-  doc.text("Thank you! Visit again.  •  Made with Anurag Bill Making", 105, 285, { align: "center" });
+  doc.text("Thank you! Visit again.  |  Made with Anurag Bill Making", 105, 285, { align: "center" });
   return doc;
 }
 
