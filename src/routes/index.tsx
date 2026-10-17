@@ -59,7 +59,11 @@ function App() {
     const t = setTimeout(() => setSplash(false), 2400);
     return () => clearTimeout(t);
   }, []);
-  useEffect(() => { if (toast) { const t = setTimeout(() => setToast(""), 2000); return () => clearTimeout(t); } }, [toast]);
+  useEffect(() => {
+    if (!toast) return undefined;
+    const t = setTimeout(() => setToast(""), 2000);
+    return () => clearTimeout(t);
+  }, [toast]);
 
   const totals = useMemo(() => (bill ? calc(bill) : { subtotal: 0, tax: 0, total: 0 }), [bill]);
   if (splash || !bill) return <Splash />;
