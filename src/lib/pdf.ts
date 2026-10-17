@@ -42,3 +42,19 @@ export async function billPdf(b: Bill) {
   doc.text("Thank you! Visit again.  •  Made with Anurag Bill Making", 105, 285, { align: "center" });
   return doc;
 }
+
+// Keeps the file link alive long enough for phones to finish saving
+// (jsPDF's own save() frees it too early on mobile, giving a 0 byte file).
+export async function downloadPdf(b: Bill) {
+  const doc = await billPdf(b);
+  const blob = doc.output("blob");
+  const name = `Bill-${b.billNo || "1"}.pdf`;
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = name;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 60_000);
+}
