@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
 import {
-  History, MapPin, LocateFixed, Loader2, Plus, Trash2, Save, Download, Printer, Share2, FilePlus2, X, Phone, User, Search, Copy,
+  History, MapPin, LocateFixed, Loader2, Plus, Trash2, Save, Download, Printer, FilePlus2, X, Phone, User, Search, Copy,
 } from "lucide-react";
 import logo from "@/assets/logo-icon.jpg";
 import { AdBanner, InterstitialAd } from "@/components/AdBanner";
@@ -100,18 +100,6 @@ function App() {
     saveBill(bill); setSaved(loadBills()); setToast("Bill save ho gaya ✓"); setAd(true);
   };
   const doDownload = () => downloadPdf(bill).then(() => setToast("PDF download ho gaya ✓"));
-  const doShare = async () => {
-    const doc = await billPdf(bill);
-    const file = new File([doc.output("blob")], `Bill-${bill.billNo}.pdf`, { type: "application/pdf" });
-    if (navigator.canShare?.({ files: [file] })) {
-      try { await navigator.share({ files: [file], title: `Bill ${bill.billNo}` }); } catch { /* cancelled */ }
-    } else {
-      const text = `${bill.shopName}\nBill No: ${bill.billNo}  Date: ${bill.date}\n` +
-        bill.items.filter((i) => i.name).map((i) => `${i.name} x${i.qty} = ${money(i.qty * i.rate)}`).join("\n") +
-        `\nTOTAL: ${money(totals.total)}`;
-      window.open(`https://wa.me/${bill.customerPhone.replace(/\D/g, "")}?text=${encodeURIComponent(text)}`, "_blank");
-    }
-  };
   const doNew = () => { setBill(blankBill()); setToast("Naya bill"); };
 
   const filtered = saved.filter((b) =>
@@ -227,13 +215,12 @@ function App() {
       </main>
 
       <nav className="no-print fixed inset-x-0 bottom-0 z-30 border-t border-border bg-card px-2 pt-2 pb-[calc(0.5rem+env(safe-area-inset-bottom))] shadow-lg">
-        <div className="mx-auto grid max-w-2xl grid-cols-5 gap-1 text-xs font-medium">
+        <div className="mx-auto grid max-w-2xl grid-cols-4 gap-1 text-xs font-medium">
           {[
             { l: "New", i: FilePlus2, f: doNew },
             { l: "Save", i: Save, f: doSave },
             { l: "Download", i: Download, f: doDownload },
             { l: "Print", i: Printer, f: () => window.print() },
-            { l: "Share", i: Share2, f: doShare },
           ].map(({ l, i: I, f }) => (
             <button key={l} onClick={f} className={`flex min-h-14 flex-col items-center justify-center gap-1 rounded-xl py-2 transition active:scale-95 ${l === "Save" ? "bg-primary text-primary-foreground" : "text-primary"}`}>
               <I className="h-5 w-5" />{l}
