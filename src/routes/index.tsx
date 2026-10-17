@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
 import {
-  History, MapPin, Plus, Trash2, Save, Download, Printer, Share2, FilePlus2, X, Phone, User, Search, Copy,
+  History, MapPin, LocateFixed, Loader2, Plus, Trash2, Save, Download, Printer, Share2, FilePlus2, X, Phone, User, Search, Copy,
 } from "lucide-react";
 import logo from "@/assets/logo-icon.jpg";
 import { AdBanner, InterstitialAd } from "@/components/AdBanner";
@@ -52,9 +52,33 @@ function App() {
   const [ad, setAd] = useState(false);
   const [toast, setToast] = useState("");
   const [q, setQ] = useState("");
+  const [locating, setLocating] = useState(false);
+
+  function detectLocation(manual: boolean) {
+    if (!navigator.geolocation) { if (manual) setToast("Location support nahi hai"); return; }
+    setLocating(true);
+    navigator.geolocation.getCurrentPosition(async ({ coords }) => {
+      let place = `${coords.latitude.toFixed(5)}, ${coords.longitude.toFixed(5)}`;
+      try {
+        const r = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&zoom=16&lat=${coords.latitude}&lon=${coords.longitude}`);
+        const j = await r.json();
+        const a = j.address || {};
+        const parts = [a.road || a.neighbourhood || a.suburb, a.city || a.town || a.village || a.county, a.state, a.postcode].filter(Boolean);
+        if (parts.length) place = parts.join(", ");
+      } catch { /* keep coordinates */ }
+      setBill((b) => (b && (manual || !b.location) ? { ...b, location: place } : b));
+      setLocating(false);
+      if (manual) setToast("Location mil gayi ✓");
+    }, () => {
+      setLocating(false);
+      if (manual) setToast("Location permission do ya khud likho");
+    }, { enableHighAccuracy: true, timeout: 15000 });
+  }
 
   useEffect(() => {
-    setBill(blankBill());
+    const fresh = blankBill();
+    setBill(fresh);
+    if (!fresh.location) detectLocation(false);
     setSaved(loadBills());
     const t = setTimeout(() => setSplash(false), 2400);
     return () => clearTimeout(t);
@@ -111,9 +135,12 @@ function App() {
         <div className="print-area rounded-3xl border border-border bg-card p-4 shadow-sm sm:p-5">
           <input value={bill.shopName} onChange={(e) => set("shopName", e.target.value)} placeholder="Yahan Dukaan Ka Naam Likho"
             className="w-full bg-transparent text-center text-xl font-bold sm:text-2xl text-primary outline-none placeholder:text-primary/40" />
-          <div className="mt-3 flex items-center gap-2 rounded-full border border-border bg-accent px-4 py-2.5">
+          <div className="mt-3 flex items-center gap-2 rounded-full border border-border bg-accent py-1.5 pl-4 pr-1.5">
             <MapPin className="h-4 w-4 text-primary" />
-            <input value={bill.location} onChange={(e) => set("location", e.target.value)} placeholder="Shop location" className="min-w-0 flex-1 bg-transparent text-base outline-none" />
+            <input value={bill.location} onChange={(e) => set("location", e.target.value)} placeholder={locating ? "Location dhoond rahe hain..." : "Shop location (tap karke likho)"} className="min-w-0 flex-1 bg-transparent text-base outline-none" />
+            <button type="button" onClick={() => detectLocation(true)} aria-label="Current location lo" className="no-print grid h-9 w-9 shrink-0 place-items-center rounded-full bg-primary text-primary-foreground active:scale-95">
+              {locating ? <Loader2 className="h-4 w-4 animate-spin" /> : <LocateFixed className="h-4 w-4" />}
+            </button>
           </div>
           <div className="mt-3 grid grid-cols-1 min-[400px]:grid-cols-2 gap-3">
             <input value={bill.phone} onChange={(e) => set("phone", e.target.value)} placeholder="Shop mobile" className={inp} />
