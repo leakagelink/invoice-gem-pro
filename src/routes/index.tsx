@@ -115,7 +115,7 @@ function App() {
             <MapPin className="h-4 w-4 text-primary" />
             <input value={bill.location} onChange={(e) => set("location", e.target.value)} placeholder="Shop location" className="flex-1 bg-transparent outline-none" />
           </div>
-          <div className="mt-3 grid grid-cols-2 gap-3">
+          <div className="mt-3 grid grid-cols-1 min-[400px]:grid-cols-2 gap-3">
             <input value={bill.phone} onChange={(e) => set("phone", e.target.value)} placeholder="Shop mobile" className={inp} />
             <input value={bill.gstin} onChange={(e) => set("gstin", e.target.value)} placeholder="GSTIN (optional)" className={inp} />
           </div>
@@ -126,7 +126,7 @@ function App() {
             <label className="text-xs font-semibold text-muted-foreground">DATE
               <input type="date" value={bill.date} onChange={(e) => set("date", e.target.value)} className={inp + " mt-1 text-base font-normal text-foreground"} /></label>
           </div>
-          <div className="mt-3 grid grid-cols-2 gap-3">
+          <div className="mt-3 grid grid-cols-1 min-[400px]:grid-cols-2 gap-3">
             <div className="relative"><User className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
               <input value={bill.customerName} onChange={(e) => set("customerName", e.target.value)} placeholder="Customer naam" className={inp + " pl-9"} /></div>
             <div className="relative"><Phone className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
