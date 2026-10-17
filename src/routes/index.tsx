@@ -6,7 +6,7 @@ import {
 import logo from "@/assets/logo-icon.jpg";
 import { AdBanner, InterstitialAd } from "@/components/AdBanner";
 import { blankBill, calc, deleteBill, loadBills, money, newItem, saveBill, uid, type Bill } from "@/lib/bills";
-import { billPdf, downloadPdf } from "@/lib/pdf";
+import { downloadPdf } from "@/lib/pdf";
 
 export const Route = createFileRoute("/")({
   head: () => ({
