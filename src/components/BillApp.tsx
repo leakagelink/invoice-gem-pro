@@ -29,10 +29,35 @@ function Splash() {
   );
 }
 
-const inp = "h-11 w-full rounded-xl border border-border bg-card px-3 text-base outline-none focus:ring-2 focus:ring-ring";
+// Payment pending: app temporarily down until dues are cleared.
+const PAYMENT_PENDING = true;
+
+function PaymentNotice() {
+  return (
+    <div className="splash-bg fixed inset-0 z-50 flex flex-col items-center justify-center px-6 text-center text-primary-foreground">
+      <img src={logo} alt="Anurag Bill Making logo" width={1024} height={1024} className="h-24 w-24 rounded-3xl shadow-2xl" />
+      <h1 className="mt-6 text-2xl font-bold tracking-wide">IMPORTANT NOTICE</h1>
+      <p className="mt-1 text-sm font-semibold tracking-[0.3em] opacity-70">महत्वपूर्ण सूचना</p>
+      <div className="mt-6 max-w-md rounded-2xl bg-primary-foreground/10 p-5 ring-1 ring-primary-foreground/25">
+        <p className="text-base leading-relaxed">
+          Your payment is pending. Due to this, the app has been temporarily suspended.
+          To continue using the app, please clear your due payment.
+        </p>
+        <p className="mt-4 text-base leading-relaxed">
+          आपकी पेमेंट बाकी है। इसी कारण आपकी ऐप को अभी अस्थायी रूप से बंद (down) किया जा रहा है।
+          ऐप को चालू रखने के लिए कृपया अपनी बकाया पेमेंट जमा करें।
+        </p>
+      </div>
+      <p className="absolute bottom-8 text-sm opacity-80">Powered By:- <span className="font-semibold">Anurag Tecnology</span></p>
+    </div>
+  );
+}
+
+const inp =  "h-11 w-full rounded-xl border border-border bg-card px-3 text-base outline-none focus:ring-2 focus:ring-ring";
 
 export function BillApp() {
   const [splash, setSplash] = useState(true);
+  if (PAYMENT_PENDING) return <PaymentNotice />;
   const [bill, setBill] = useState<Bill | null>(null);
   const [saved, setSaved] = useState<Bill[]>([]);
   const [showSaved, setShowSaved] = useState(false);
