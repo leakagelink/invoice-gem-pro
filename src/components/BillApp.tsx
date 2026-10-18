@@ -57,6 +57,7 @@ const inp =  "h-11 w-full rounded-xl border border-border bg-card px-3 text-base
 
 export function BillApp() {
   const [splash, setSplash] = useState(true);
+  if (PAYMENT_PENDING) return <PaymentNotice />;
   const [bill, setBill] = useState<Bill | null>(null);
   const [saved, setSaved] = useState<Bill[]>([]);
   const [showSaved, setShowSaved] = useState(false);
