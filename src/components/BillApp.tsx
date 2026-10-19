@@ -1,8 +1,48 @@
 import { useEffect, useMemo, useState } from "react";
 import {
-  History, MapPin, LocateFixed, Loader2, Plus, Trash2, Save, Download, Printer, FilePlus2, X, Phone, User, Search, Copy,
+  History, MapPin, LocateFixed, Loader2, Plus, Trash2, Save, Download, Printer, FilePlus2, X, Phone, User, Search, Copy, Wallet, AlertTriangle,
 } from "lucide-react";
 import logo from "@/assets/logo-icon.jpg";
+import paymentQr from "@/assets/payment-qr.jpg.asset.json";
+
+const UPI_ID = "zxpredict@axl";
+
+function PaymentScreen({ onClose }: { onClose: () => void }) {
+  const copyUpi = () => {
+    navigator.clipboard?.writeText(UPI_ID).catch(() => {});
+  };
+  return (
+    <div className="no-print fixed inset-0 z-40 flex flex-col bg-background">
+      <div className="flex items-center gap-3 bg-destructive px-4 py-4 text-destructive-foreground">
+        <Wallet className="h-5 w-5" />
+        <h2 className="flex-1 text-lg font-bold">Pending Payment</h2>
+        <button onClick={onClose} aria-label="Close"><X /></button>
+      </div>
+      <div className="flex-1 overflow-auto p-4 pb-8">
+        <div className="mx-auto max-w-md space-y-4">
+          <div className="flex items-start gap-3 rounded-2xl border border-destructive/40 bg-destructive/10 p-4">
+            <AlertTriangle className="mt-0.5 h-5 w-5 shrink-0 text-destructive" />
+            <div className="text-sm font-semibold text-destructive">
+              Agar aap 10 minute me payment nahi karte to aapki app ko band kar diya jayega.
+              <span className="mt-1 block font-normal">If payment is not made within 10 minutes, this app will be stopped.</span>
+            </div>
+          </div>
+          <div className="rounded-3xl border border-border bg-card p-4 text-center shadow-sm">
+            <p className="text-sm font-semibold text-muted-foreground">QR scan karke payment karein</p>
+            <img src={paymentQr.url} alt="UPI payment QR" className="mx-auto mt-3 w-full max-w-xs rounded-2xl border border-border" />
+            <button onClick={copyUpi} className="mt-3 inline-flex items-center gap-2 rounded-full border border-primary/30 bg-accent px-4 py-2 font-semibold text-primary active:scale-95">
+              <Copy className="h-4 w-4" /> UPI ID: {UPI_ID}
+            </button>
+            <p className="mt-3 text-xs font-semibold text-destructive">Iske alawa kahi par bhi payment na karein — sirf {UPI_ID}</p>
+          </div>
+          <p className="rounded-2xl bg-accent p-3 text-center text-sm text-muted-foreground">
+            Payment karne ke baad automatically ye option hat jayega aur admin access de di jayegi.
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}
 import { AdBanner, InterstitialAd } from "@/components/AdBanner";
 import { blankBill, calc, deleteBill, loadBills, money, newItem, saveBill, uid, type Bill } from "@/lib/bills";
 import { downloadPdf } from "@/lib/pdf";
@@ -35,6 +75,7 @@ export function BillApp() {
   const [bill, setBill] = useState<Bill | null>(null);
   const [saved, setSaved] = useState<Bill[]>([]);
   const [showSaved, setShowSaved] = useState(false);
+  const [showPayment, setShowPayment] = useState(false);
   const [ad, setAd] = useState(false);
   const [toast, setToast] = useState("");
   const [q, setQ] = useState("");
@@ -206,14 +247,15 @@ export function BillApp() {
       </main>
 
       <nav className="no-print fixed inset-x-0 bottom-0 z-30 border-t border-border bg-card px-2 pt-2 pb-[calc(0.5rem+env(safe-area-inset-bottom))] shadow-lg">
-        <div className="mx-auto grid max-w-2xl grid-cols-4 gap-1 text-xs font-medium">
+        <div className="mx-auto grid max-w-2xl grid-cols-5 gap-1 text-xs font-medium">
           {[
             { l: "New", i: FilePlus2, f: doNew },
             { l: "Save", i: Save, f: doSave },
             { l: "Download", i: Download, f: doDownload },
             { l: "Print", i: Printer, f: () => window.print() },
+            { l: "Payment", i: Wallet, f: () => setShowPayment(true) },
           ].map(({ l, i: I, f }) => (
-            <button key={l} onClick={f} className={`flex min-h-14 flex-col items-center justify-center gap-1 rounded-xl py-2 transition active:scale-95 ${l === "Save" ? "bg-primary text-primary-foreground" : "text-primary"}`}>
+            <button key={l} onClick={f} className={`flex min-h-14 flex-col items-center justify-center gap-1 rounded-xl py-2 transition active:scale-95 ${l === "Save" ? "bg-primary text-primary-foreground" : l === "Payment" ? "bg-destructive/10 font-bold text-destructive ring-1 ring-destructive/40 animate-pulse" : "text-primary"}`}>
               <I className="h-5 w-5" />{l}
             </button>
           ))}
@@ -252,6 +294,13 @@ export function BillApp() {
         </div>
       )}
 
+      <button onClick={() => setShowPayment(true)}
+        className="no-print fixed left-0 top-1/2 z-30 flex -translate-y-1/2 flex-col items-center gap-1 rounded-r-2xl bg-destructive px-2 py-4 text-[10px] font-bold text-destructive-foreground shadow-lg shadow-destructive/40 active:scale-95"
+        aria-label="Pending payment">
+        <Wallet className="h-5 w-5 animate-pulse" />
+        <span className="[writing-mode:vertical-rl] rotate-180 tracking-wider">PENDING PAYMENT</span>
+      </button>
+      {showPayment && <PaymentScreen onClose={() => setShowPayment(false)} />}
       {ad && <InterstitialAd onClose={() => setAd(false)} />}
       {toast && <div className="no-print fixed bottom-24 left-1/2 z-50 -translate-x-1/2 rounded-full bg-foreground px-5 py-2 text-sm text-background">{toast}</div>}
     </div>
