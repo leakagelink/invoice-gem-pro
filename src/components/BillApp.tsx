@@ -62,7 +62,7 @@ function Splash() {
         <div className="animate-loadbar h-full rounded-full bg-primary-foreground" />
       </div>
       <p className="absolute bottom-10 text-sm opacity-80">
-        Powered By:- <span className="font-semibold">Anurag Tecnology</span>
+        Powered By:- <span className="font-semibold">Socilet</span>
       </p>
     </div>
   );
@@ -243,7 +243,7 @@ export function BillApp() {
           </div>
         </div>
         <p className="no-print mt-4 text-center text-sm text-muted-foreground">Works fully offline · Data stays on this device</p>
-        <p className="no-print mt-1 text-center text-xs text-muted-foreground">Powered By:- Anurag Tecnology</p>
+        <p className="no-print mt-1 text-center text-xs text-muted-foreground">Powered By:- Socilet</p>
       </main>
 
       <nav className="no-print fixed inset-x-0 bottom-0 z-30 border-t border-border bg-card px-2 pt-2 pb-[calc(0.5rem+env(safe-area-inset-bottom))] shadow-lg">
