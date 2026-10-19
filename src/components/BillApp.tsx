@@ -75,6 +75,7 @@ export function BillApp() {
   const [bill, setBill] = useState<Bill | null>(null);
   const [saved, setSaved] = useState<Bill[]>([]);
   const [showSaved, setShowSaved] = useState(false);
+  const [showPayment, setShowPayment] = useState(false);
   const [ad, setAd] = useState(false);
   const [toast, setToast] = useState("");
   const [q, setQ] = useState("");
@@ -246,14 +247,15 @@ export function BillApp() {
       </main>
 
       <nav className="no-print fixed inset-x-0 bottom-0 z-30 border-t border-border bg-card px-2 pt-2 pb-[calc(0.5rem+env(safe-area-inset-bottom))] shadow-lg">
-        <div className="mx-auto grid max-w-2xl grid-cols-4 gap-1 text-xs font-medium">
+        <div className="mx-auto grid max-w-2xl grid-cols-5 gap-1 text-xs font-medium">
           {[
             { l: "New", i: FilePlus2, f: doNew },
             { l: "Save", i: Save, f: doSave },
             { l: "Download", i: Download, f: doDownload },
             { l: "Print", i: Printer, f: () => window.print() },
+            { l: "Payment", i: Wallet, f: () => setShowPayment(true) },
           ].map(({ l, i: I, f }) => (
-            <button key={l} onClick={f} className={`flex min-h-14 flex-col items-center justify-center gap-1 rounded-xl py-2 transition active:scale-95 ${l === "Save" ? "bg-primary text-primary-foreground" : "text-primary"}`}>
+            <button key={l} onClick={f} className={`flex min-h-14 flex-col items-center justify-center gap-1 rounded-xl py-2 transition active:scale-95 ${l === "Save" ? "bg-primary text-primary-foreground" : l === "Payment" ? "bg-destructive/10 font-bold text-destructive ring-1 ring-destructive/40 animate-pulse" : "text-primary"}`}>
               <I className="h-5 w-5" />{l}
             </button>
           ))}
