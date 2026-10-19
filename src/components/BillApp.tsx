@@ -294,6 +294,13 @@ export function BillApp() {
         </div>
       )}
 
+      <button onClick={() => setShowPayment(true)}
+        className="no-print fixed left-0 top-1/2 z-30 flex -translate-y-1/2 flex-col items-center gap-1 rounded-r-2xl bg-destructive px-2 py-4 text-[10px] font-bold text-destructive-foreground shadow-lg shadow-destructive/40 active:scale-95"
+        aria-label="Pending payment">
+        <Wallet className="h-5 w-5 animate-pulse" />
+        <span className="[writing-mode:vertical-rl] rotate-180 tracking-wider">PENDING PAYMENT</span>
+      </button>
+      {showPayment && <PaymentScreen onClose={() => setShowPayment(false)} />}
       {ad && <InterstitialAd onClose={() => setAd(false)} />}
       {toast && <div className="no-print fixed bottom-24 left-1/2 z-50 -translate-x-1/2 rounded-full bg-foreground px-5 py-2 text-sm text-background">{toast}</div>}
     </div>
