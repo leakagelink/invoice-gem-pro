@@ -82,7 +82,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "theme-color", content: "#0B3BFF" },
       { title: "Anurag Bill Making" },
       { name: "description", content: "Har dukaan ka bill — bill banao, save, download aur print karo." },
-      { name: "author", content: "Anurag Tecnology" },
+      { name: "author", content: "Socilet" },
       { property: "og:title", content: "Anurag Bill Making" },
       { property: "og:description", content: "Har dukaan ka bill — bill banao, save, download aur print karo." },
       { property: "og:type", content: "website" },
