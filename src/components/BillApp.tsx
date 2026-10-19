@@ -18,7 +18,6 @@ function Splash() {
       </div>
       <h1 className="mt-8 text-3xl font-bold tracking-wide">ANURAG BILL MAKING</h1>
       <p className="mt-2 text-xs tracking-[0.4em] opacity-70">HAR DUKAAN KA BILL</p>
-      <p className="mt-3 text-[10px] font-semibold opacity-80">DEMO APP</p>
       <div className="mt-8 h-1.5 w-64 overflow-hidden rounded-full bg-primary-foreground/20">
         <div className="animate-loadbar h-full rounded-full bg-primary-foreground" />
       </div>
@@ -29,35 +28,10 @@ function Splash() {
   );
 }
 
-// Payment pending: app temporarily down until dues are cleared.
-const PAYMENT_PENDING = true;
-
-function PaymentNotice() {
-  return (
-    <div className="splash-bg fixed inset-0 z-50 flex flex-col items-center justify-center px-6 text-center text-primary-foreground">
-      <img src={logo} alt="Anurag Bill Making logo" width={1024} height={1024} className="h-24 w-24 rounded-3xl shadow-2xl" />
-      <h1 className="mt-6 text-2xl font-bold tracking-wide">IMPORTANT NOTICE</h1>
-      <p className="mt-1 text-sm font-semibold tracking-[0.3em] opacity-70">महत्वपूर्ण सूचना</p>
-      <div className="mt-6 max-w-md rounded-2xl bg-primary-foreground/10 p-5 ring-1 ring-primary-foreground/25">
-        <p className="text-base leading-relaxed">
-          Your payment is pending. Due to this, the app has been temporarily suspended.
-          To continue using the app, please clear your due payment.
-        </p>
-        <p className="mt-4 text-base leading-relaxed">
-          आपकी पेमेंट बाकी है। इसी कारण आपकी ऐप को अभी अस्थायी रूप से बंद (down) किया जा रहा है।
-          ऐप को चालू रखने के लिए कृपया अपनी बकाया पेमेंट जमा करें।
-        </p>
-      </div>
-      <p className="absolute bottom-8 text-sm opacity-80">Powered By:- <span className="font-semibold">Anurag Tecnology</span></p>
-    </div>
-  );
-}
-
 const inp =  "h-11 w-full rounded-xl border border-border bg-card px-3 text-base outline-none focus:ring-2 focus:ring-ring";
 
 export function BillApp() {
   const [splash, setSplash] = useState(true);
-  if (PAYMENT_PENDING) return <PaymentNotice />;
   const [bill, setBill] = useState<Bill | null>(null);
   const [saved, setSaved] = useState<Bill[]>([]);
   const [showSaved, setShowSaved] = useState(false);
@@ -127,7 +101,6 @@ export function BillApp() {
           <img src={logo} alt="" width={40} height={40} className="h-9 w-9 shrink-0 rounded-xl sm:h-10 sm:w-10" />
           <div className="min-w-0">
             <h1 className="truncate text-base font-bold tracking-wide sm:text-lg">ANURAG BILL MAKING</h1>
-            <p className="mt-0.5 text-[10px] font-semibold text-primary-foreground/80">DEMO APP</p>
           </div>
         </div>
         <button onClick={() => setShowSaved(true)} className="flex h-10 shrink-0 items-center gap-1.5 rounded-full bg-primary-foreground/15 px-3 text-sm active:bg-primary-foreground/25">
@@ -245,7 +218,6 @@ export function BillApp() {
             </button>
           ))}
         </div>
-        <p className="pt-1 text-center text-[10px] font-semibold leading-3 text-muted-foreground">DEMO APP</p>
       </nav>
 
       {showSaved && (
@@ -253,7 +225,6 @@ export function BillApp() {
           <div className="flex items-center gap-3 bg-primary px-4 py-4 text-primary-foreground">
             <div className="flex-1">
               <h2 className="text-lg font-bold">Saved Bills ({saved.length})</h2>
-              <p className="mt-0.5 text-[10px] font-semibold text-primary-foreground/80">DEMO APP</p>
             </div>
             <button onClick={() => setShowSaved(false)} aria-label="Close"><X /></button>
           </div>
@@ -278,7 +249,6 @@ export function BillApp() {
             ))}
           </div>
           <div className="p-3"><AdBanner /></div>
-          <p className="pb-[calc(0.5rem+env(safe-area-inset-bottom))] text-center text-[10px] font-semibold text-muted-foreground">DEMO APP</p>
         </div>
       )}
 
