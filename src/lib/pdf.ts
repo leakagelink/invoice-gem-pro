@@ -38,17 +38,6 @@ export async function billPdf(b: Bill) {
   doc.setFontSize(10); doc.setFont("helvetica", "normal");
   doc.text(`Payment: ${b.paymentMode}`, 14, y);
   if (b.notes) doc.text(doc.splitTextToSize("Note: " + b.notes, 180), 14, y + 7);
-  // DEMO APP watermark stamped over the finished bill
-  doc.saveGraphicsState();
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  doc.setGState((doc as any).GState({ opacity: 0.16 }));
-  doc.setTextColor(220, 38, 38);
-  doc.setFont("helvetica", "bold");
-  doc.setFontSize(40);
-  doc.text("DEMO APP", 105, 160, { align: "center", angle: 30 });
-  doc.setFontSize(12);
-  doc.text("Test Version — Anurag Tecnology", 105, 175, { align: "center", angle: 30 });
-  doc.restoreGraphicsState();
   doc.setTextColor(120);
   doc.text("Thank you! Visit again.  |  Made with Anurag Bill Making", 105, 285, { align: "center" });
   return doc;

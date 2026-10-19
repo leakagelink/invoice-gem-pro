@@ -249,7 +249,6 @@ export function BillApp() {
             ))}
           </div>
           <div className="p-3"><AdBanner /></div>
-          <p className="pb-[calc(0.5rem+env(safe-area-inset-bottom))] text-center text-[10px] font-semibold text-muted-foreground">DEMO APP</p>
         </div>
       )}
 
