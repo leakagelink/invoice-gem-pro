@@ -13,3 +13,4 @@
 - Android ships every screen and asset in dist-android; do not register app-shell workers in the packaged client because local assets already work offline.
 - Register the published website's generated worker only through register-app-worker with preview, iframe, development, and kill-switch guards; use NetworkFirst for document requests and never cache OAuth or API requests.
 - Validate locally stored bill collections before startup so invalid storage cannot strand the splash screen.
+- Enforce notice-only mode at the shared BillApp entry before mounting the bill editor, so web and Android cannot initialize bill actions behind the notice.

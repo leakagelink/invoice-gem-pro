@@ -1,4 +1,5 @@
 # Tasks
+- [x] Show only the payment notice and prevent all bill screens and actions from starting; verified on phone-size browser and with startup tests.
 - [x] Fix Android startup and shorten the splash.
 - [x] Add safe offline caching without caching the editor preview.
 - [x] Verify startup, saved bills, and caching safeguards; provide Android update commands in ANDROID.md.
