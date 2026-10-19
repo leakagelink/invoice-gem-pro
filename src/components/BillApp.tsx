@@ -4,10 +4,11 @@ import {
 } from "lucide-react";
 import logo from "@/assets/logo-icon.jpg";
 import paymentQr from "@/assets/payment-qr.jpg.asset.json";
+import { Button } from "@/components/ui/button";
 
 const UPI_ID = "zxpredict@axl";
 
-function PaymentScreen({ onClose }: { onClose: () => void }) {
+function PaymentScreen({ onClose }: { onClose?: () => void }) {
   const copyUpi = () => {
     navigator.clipboard?.writeText(UPI_ID).catch(() => {});
   };
@@ -15,8 +16,8 @@ function PaymentScreen({ onClose }: { onClose: () => void }) {
     <div className="no-print fixed inset-0 z-40 flex flex-col bg-background">
       <div className="flex items-center gap-3 bg-destructive px-4 py-4 text-destructive-foreground">
         <Wallet className="h-5 w-5" />
-        <h2 className="flex-1 text-lg font-bold">Pending Payment</h2>
-        <button onClick={onClose} aria-label="Close"><X /></button>
+        <h2 className="flex-1 text-lg font-bold">Important Notice — Pending Payment</h2>
+        {onClose && <Button variant="ghost" size="icon" onClick={onClose} aria-label="Close"><X /></Button>}
       </div>
       <div className="flex-1 overflow-auto p-4 pb-8">
         <div className="mx-auto max-w-md space-y-4">
@@ -30,9 +31,9 @@ function PaymentScreen({ onClose }: { onClose: () => void }) {
           <div className="rounded-3xl border border-border bg-card p-4 text-center shadow-sm">
             <p className="text-sm font-semibold text-muted-foreground">QR scan karke payment karein</p>
             <img src={paymentQr.url} alt="UPI payment QR" className="mx-auto mt-3 w-full max-w-xs rounded-2xl border border-border" />
-            <button onClick={copyUpi} className="mt-3 inline-flex items-center gap-2 rounded-full border border-primary/30 bg-accent px-4 py-2 font-semibold text-primary active:scale-95">
+            <Button variant="outline" onClick={copyUpi} className="mt-3 h-auto max-w-full flex-wrap gap-2 border-primary/30 bg-accent px-4 py-2 font-semibold text-primary active:scale-95">
               <Copy className="h-4 w-4" /> UPI ID: {UPI_ID}
-            </button>
+            </Button>
             <p className="mt-3 text-xs font-semibold text-destructive">Iske alawa kahi par bhi payment na karein — sirf {UPI_ID}</p>
           </div>
           <p className="rounded-2xl bg-accent p-3 text-center text-sm text-muted-foreground">
@@ -71,6 +72,10 @@ function Splash() {
 const inp =  "h-11 w-full rounded-xl border border-border bg-card px-3 text-base outline-none focus:ring-2 focus:ring-ring";
 
 export function BillApp() {
+  return <PaymentScreen />;
+}
+
+function BillEditor() {
   const [splash, setSplash] = useState(true);
   const [bill, setBill] = useState<Bill | null>(null);
   const [saved, setSaved] = useState<Bill[]>([]);
